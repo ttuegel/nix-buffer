@@ -110,6 +110,7 @@ OUT The build result."
   (when (or (gethash out nix-buffer--trusted-exprs)
 	    (nix-buffer--query-safety expr-file out))
     (load-file out)
+		(message "nix-buffer: loaded `%s'" out)
     (run-hooks 'nix-buffer-after-load-hook)))
 
 (defun nix-buffer--sentinel
@@ -162,6 +163,7 @@ EXPR-FILE The file containing the nix expression to build."
 	 (current-out (file-symlink-p out-link))
 	 (err (generate-new-buffer " nix-buffer-nix-build-stderr")))
     (ignore-errors (make-directory state-dir t))
+		(message "nix-buffer: building `%s' in the background" expr-file)
     (make-process
      :name "nix-buffer-nix-build"
      :buffer (generate-new-buffer " nix-buffer-nix-build-stdout")
